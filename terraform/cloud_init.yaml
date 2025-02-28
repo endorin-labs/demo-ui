@@ -4,7 +4,7 @@ write_files:
   # setup proxy service for database connections from enclave to supabase
   - path: /etc/systemd/system/db-socat-proxy.service
     owner: root:root
-    permissions: '0644'
+    permissions: "0644"
     content: |
       [Unit]
       Description=DB Socat Proxy
@@ -26,7 +26,7 @@ write_files:
   # setup proxy service for llm traffic between enclave and outside world
   - path: /etc/systemd/system/llm-socat-proxy.service
     owner: root:root
-    permissions: '0644'
+    permissions: "0644"
     content: |
       [Unit]
       Description=LLM Socat Proxy
@@ -85,13 +85,13 @@ runcmd:
 
     # clone and build your app
     cd /home/ec2-user
-    if [ ! -d "mew" ]; then
+    if [ ! -d "demo-ui" ]; then
       git clone https://github.com/endorin-labs/demo-ui.git
     else
-      cd mew && git pull origin main && cd ..
+      cd demo-ui && git pull origin main && cd ..
     fi
 
-    cd mew
+    cd demo-ui
     # build docker images
     sudo docker build -t enclave_base enclaves/enclave_base
     sudo docker build -t enclave .
