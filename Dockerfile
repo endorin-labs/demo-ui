@@ -1,33 +1,42 @@
-# ---- Base Node ----
-FROM node:20-alpine AS base
+FROM enclave_base
 WORKDIR /app
-COPY package*.json ./
 
-# ---- Dependencies ----
-FROM base AS dependencies
-RUN npm ci
+# update system and install needed dependencies
+RUN yum update -y && \
+    yum install -y gcc openssl-devel bzip2-devel libffi-devel \
+    zlib-devel wget tar gzip make which \
+    iproute git unzip # we only need git now, not nodejs/npm
 
-# ---- Build ----
-FROM dependencies AS build
-COPY . .
-RUN npm run build
+# install socat
+RUN wget http://www.dest-unreach.org/socat/download/socat-1.8.0.2.tar.gz -P /tmp && \
+    cd /tmp && tar xzf socat-1.8.0.2.tar.gz && \
+    cd socat-1.8.0.2 && \
+    ./configure && make && make install && \
+    cd ~ && rm -rf /tmp/socat-1.8.0.2 /tmp/socat-1.8.0.2.tar.gz
 
-# ---- Production ----
-FROM node:20-alpine AS production
-WORKDIR /app
-COPY --from=dependencies /app/node_modules ./node_modules
-COPY --from=build /app/.next ./.next
-COPY --from=build /app/public ./public
-COPY --from=build /app/package*.json ./
-COPY --from=build /app/next.config.js ./next.config.js
-COPY --from=build /app/next-i18next.config.js ./next-i18next.config.js
+# install ollama
+RUN curl -fsSL https://ollama.com/install.sh | sh
 
-# Set the environment variable
-ENV DEFAULT_MODEL="mistral:latest"
-ENV OLLAMA_HOST="http://host.docker.internal:11434"
+RUN ollama serve & sleep 10 && ollama pull llama3.2:3b
 
-# Expose the port the app will run on
-EXPOSE 3000
+# install bun
+RUN curl -fsSL https://bun.sh/install | bash
+# Add bun to PATH
+ENV PATH="/root/.bun/bin:${PATH}"
 
-# Start the application
-CMD ["npm", "start"]
+# set HOME for ollama to work properly
+ENV HOME=/root
+
+# clone and build chatbot-ollama ui with bun
+COPY . /app/
+
+ENV DEFAULT_MODEL="llama3.2:3b"
+ENV OLLAMA_HOST="http://127.0.0.1:11434"
+RUN echo "OLLAMA_HOST=http://127.0.0.1:11434" > /app/.env.local && \
+    echo "DEFAULT_MODEL=llama3.2:3b" >> /app/.env.local
+
+# copy our entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
