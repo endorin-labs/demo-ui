@@ -38,7 +38,7 @@ write_files:
       StandardOutput=journal
       StandardError=journal
       SyslogIdentifier=llm-socat-proxy
-      ExecStart=/bin/bash -ce "exec /usr/local/bin/socat tcp-listen:443,fork,reuseaddr VSOCK-CONNECT:22:3000"
+      ExecStart=/bin/bash -ce "exec /usr/local/bin/socat tcp-listen:3000,fork,reuseaddr VSOCK-CONNECT:22:3000"
       Restart=always
       TimeoutSec=0
 

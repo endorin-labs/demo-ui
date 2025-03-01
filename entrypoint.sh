@@ -16,5 +16,4 @@ sleep 5
 
 # start the chatbot ui with bun (much faster!)
 cd /app/
-bun i
 bun dev
