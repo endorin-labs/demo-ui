@@ -12,8 +12,9 @@ socat vsock-listen:3000,fork,reuseaddr tcp-connect:localhost:3000 &
 ollama serve &
 
 # wait for ollama to start
-sleep 5 
+sleep 5
 
 # start the chatbot ui with bun (much faster!)
-cd /app/chatbot-ollama
+cd /app/
+bun i
 bun start
