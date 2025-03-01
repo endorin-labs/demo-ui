@@ -33,6 +33,7 @@ import { Prompt } from '@/types/prompt';
 
 import { Chat } from '@/components/Chat/Chat';
 import { Chatbar } from '@/components/Chatbar/Chatbar';
+import { EnclaveShield } from '@/components/EnclaveShield';
 import { Navbar } from '@/components/Mobile/Navbar';
 import Promptbar from '@/components/Promptbar';
 
@@ -304,7 +305,10 @@ const Home = ({ defaultModelId }: Props) => {
     >
       <Head>
         <title>Chatbot Ollama</title>
-        <meta name="description" content="ChatGPT but local." />
+        <meta
+          name="description"
+          content="ChatGPT but local and secure with Nitro Enclaves."
+        />
         <meta
           name="viewport"
           content="height=device-height ,width=device-width, initial-scale=1, user-scalable=no"
@@ -316,10 +320,16 @@ const Home = ({ defaultModelId }: Props) => {
           className={`flex h-screen w-screen flex-col text-sm text-white dark:text-white ${lightMode}`}
         >
           <div className="fixed top-0 w-full sm:hidden">
-            <Navbar
-              selectedConversation={selectedConversation}
-              onNewConversation={handleNewConversation}
-            />
+            <div className="flex justify-between items-center bg-[#202123] py-3 px-4">
+              <Navbar
+                selectedConversation={selectedConversation}
+                onNewConversation={handleNewConversation}
+              />
+              {/* Add shield to mobile navbar */}
+              <div className="mr-2">
+                <EnclaveShield />
+              </div>
+            </div>
           </div>
 
           <div className="flex h-full w-full pt-[48px] sm:pt-0">
@@ -339,8 +349,7 @@ const Home = ({ defaultModelId }: Props) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
-  const defaultModelId = 
-  process.env.DEFAULT_MODEL || fallbackModelID;
+  const defaultModelId = process.env.DEFAULT_MODEL || fallbackModelID;
 
   return {
     props: {

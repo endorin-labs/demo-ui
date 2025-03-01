@@ -6,7 +6,7 @@ data "aws_eip" "endorin_chat" {
   public_ip = "44.195.238.230"
 }
 
-resource "aws_instance" "enclave_demo_1" {
+resource "aws_instance" "enclave_demo" {
   ami                    = "ami-053a45fff0a704a47"
   instance_type          = "m5n.4xlarge"
   key_name               = "vsock-aakash" # Ensure this key pair exists
@@ -26,14 +26,10 @@ resource "aws_instance" "enclave_demo_1" {
   enclave_options {
     enabled = true
   }
-
-  tags = {
-    Name = "Enclave-Aniket"
-  }
 }
 
 resource "aws_eip_association" "eip_assoc" {
-  instance_id   = aws_instance.enclave_demo_1.id
+  instance_id   = aws_instance.enclave_demo.id
   allocation_id = data.aws_eip.endorin_chat.id
 }
 
