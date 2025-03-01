@@ -262,9 +262,7 @@ export const ChatInput = ({
           )}
 
         <div className="relative mx-2 flex w-full flex-grow flex-col rounded-md border border-black/10 bg-white shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:border-gray-900/50 dark:bg-[#40414F] dark:text-white dark:shadow-[0_0_15px_rgba(0,0,0,0.10)] sm:mx-4">
-          <div
-            className="absolute left-2 top-2 rounded-sm p-1 text-neutral-800 opacity-60 dark:bg-opacity-50 dark:text-neutral-100 dark:hover:text-neutral-200"
-          >
+          <div className="absolute left-2 top-2 rounded-sm p-1 text-neutral-800 opacity-60 dark:bg-opacity-50 dark:text-neutral-100 dark:hover:text-neutral-200">
             <IconBolt size={20} />
           </div>
           <textarea
@@ -337,17 +335,13 @@ export const ChatInput = ({
       </div>
       <div className="px-3 pt-2 pb-3 text-center text-[12px] text-black/50 dark:text-white/50 md:px-4 md:pt-3 md:pb-6">
         <a
-          href="https://github.com/ivanfioravanti/chatbot-ollama"
+          href="https://github.com/endorin-labs/demo-ui.git"
           target="_blank"
           rel="noreferrer"
           className="underline"
         >
-          Chatbot Ollama
+          Endorin Labs. Talk to LLMs with complete confidentiality.
         </a>
-        .{' '}
-        {t(
-          "Chatbot Ollama is an advanced chatbot kit for Ollama models aiming to mimic ChatGPT's interface and functionality.",
-        )}
       </div>
     </div>
   );
