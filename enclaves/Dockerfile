@@ -88,5 +88,7 @@ FROM $BASE_IMAGE as enclave_base
 WORKDIR /app
 # Copy required binaries from the builder stage.
 COPY --from=builder /usr/lib64/libnsm.so /usr/lib64/libnsm.so
+COPY --from=builder /usr/include/nsm.h /usr/include/nsm.h
+
 # Copy the kms-enclave-cli built by aws-nitro-enclaves-sdk-c.
 COPY --from=builder /usr/bin/kmstool_enclave_cli /app/
