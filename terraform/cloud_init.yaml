@@ -4,7 +4,7 @@ write_files:
   # setup proxy service for database connections from enclave to supabase
   - path: /etc/systemd/system/db-socat-proxy.service
     owner: root:root
-    permissions: '0644'
+    permissions: "0644"
     content: |
       [Unit]
       Description=DB Socat Proxy
@@ -26,7 +26,7 @@ write_files:
   # setup proxy service for llm traffic between enclave and outside world
   - path: /etc/systemd/system/llm-socat-proxy.service
     owner: root:root
-    permissions: '0644'
+    permissions: "0644"
     content: |
       [Unit]
       Description=LLM Socat Proxy
@@ -47,19 +47,12 @@ write_files:
 
 runcmd:
   - |
-    # base system setup
-    sudo dnf install -y epel-release
-    sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
-
     # install nitro enclave tools
     sudo dnf install aws-nitro-enclaves-cli -y
     sudo dnf install aws-nitro-enclaves-cli-devel -y
 
-    # install apache
-    sudo yum -y install httpd mod_ssl
-
     # install nitro_enclaves acm
-    sudo yum install aws-nitro-enclaves-acm -y
+    sudo dnf install aws-nitro-enclaves-acm -y
 
     # dev tools and python 3.12
     sudo dnf install -y git cmake3 gcc make gcc-c++ ninja-build python3.12-devel
@@ -75,6 +68,9 @@ runcmd:
     # docker setup
     sudo systemctl start docker
     sudo systemctl enable docker
+
+    # install nginx
+    sudo dnf -y install nginx
 
     # install socat from source (needed for vsock)
     wget http://www.dest-unreach.org/socat/download/socat-1.8.0.2.tar.gz -P /tmp
