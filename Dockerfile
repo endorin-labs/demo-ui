@@ -29,6 +29,9 @@ ENV HOME=/root
 
 # clone and build chatbot-ollama ui with bun
 COPY . /app/
+WORKDIR /app/
+RUN bun install
+RUN bun run build
 
 ENV DEFAULT_MODEL="llama3.2:3b"
 ENV OLLAMA_HOST="http://127.0.0.1:11434"
